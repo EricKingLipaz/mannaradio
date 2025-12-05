@@ -41,7 +41,7 @@ router.post('/register', async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { id: result.insertId, email, name },
+            { id: result.insertId, email, name, role: 'moderator' }, // Default role for new registration (if we keep it public?) actually let's set it
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
         res.status(201).json({
             message: 'Pastor registered successfully',
             token,
-            pastor: { id: result.insertId, name, email }
+            pastor: { id: result.insertId, name, email, role: 'moderator' }
         });
     } catch (error) {
         console.error('Register error:', error);
@@ -88,7 +88,7 @@ router.post('/login', async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { id: pastor.id, email: pastor.email, name: pastor.name },
+            { id: pastor.id, email: pastor.email, name: pastor.name, role: pastor.role },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
@@ -96,7 +96,7 @@ router.post('/login', async (req, res) => {
         res.json({
             message: 'Login successful',
             token,
-            pastor: { id: pastor.id, name: pastor.name, email: pastor.email }
+            pastor: { id: pastor.id, name: pastor.name, email: pastor.email, role: pastor.role }
         });
     } catch (error) {
         console.error('Login error:', error);
@@ -166,6 +166,71 @@ router.put('/change-password', authMiddleware, async (req, res) => {
     } catch (error) {
         console.error('Change password error:', error);
         res.status(500).json({ error: 'Failed to change password' });
+    }
+});
+
+// Create new user (Admin only)
+router.post('/users', authMiddleware, async (req, res) => {
+    try {
+        // Check if requester is admin
+        if (req.pastor.role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied. Admin role required.' });
+        }
+
+        const { name, email, password, role } = req.body;
+
+        // Validate input
+        if (!name || !email || !password || !role) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({ error: 'Password must be at least 6 characters' });
+        }
+
+        if (!['admin', 'moderator'].includes(role)) {
+            return res.status(400).json({ error: 'Invalid role' });
+        }
+
+        // Check if email already exists
+        const [existingPastors] = await pool.query(
+            'SELECT id FROM pastors WHERE email = ?',
+            [email]
+        );
+
+        if (existingPastors.length > 0) {
+            return res.status(400).json({ error: 'Email already registered' });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert pastor
+        const [result] = await pool.query(
+            'INSERT INTO pastors (name, email, password, role) VALUES (?, ?, ?, ?)',
+            [name, email, hashedPassword, role]
+        );
+
+        res.status(201).json({
+            message: 'User created successfully',
+            user: { id: result.insertId, name, email, role }
+        });
+    } catch (error) {
+        console.error('Create user error:', error);
+        res.status(500).json({ error: 'Failed to create user' });
+    }
+});
+
+// Get all users (Admin only)
+router.get('/users', authMiddleware, async (req, res) => {
+    try {
+        if (req.pastor.role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+        const [users] = await pool.query('SELECT id, name, email, role, created_at FROM pastors');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch users' });
     }
 });
 

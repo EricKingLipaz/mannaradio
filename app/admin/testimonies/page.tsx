@@ -17,6 +17,7 @@ export default function AdminTestimoniesPage() {
     const [testimonies, setTestimonies] = useState<Testimony[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [filter, setFilter] = useState<"all" | "pending" | "approved" | "declined">("all")
+    const [currentUserRole, setCurrentUserRole] = useState("")
 
     useEffect(() => {
         fetchTestimonies()
@@ -24,10 +25,14 @@ export default function AdminTestimoniesPage() {
 
     const fetchTestimonies = async () => {
         try {
+            // Fetch user role first or parallel
+            const { pastor } = await apiClient.request('/auth/me');
+            setCurrentUserRole(pastor.role || 'moderator');
+
             const data = await apiClient.getAdminTestimonies()
             setTestimonies(data)
         } catch (error) {
-            console.error("Error fetching testimonies:", error)
+            console.error("Error fetching data:", error)
         } finally {
             setIsLoading(false)
         }
@@ -52,7 +57,7 @@ export default function AdminTestimoniesPage() {
             setTestimonies(testimonies.filter(t => t.id !== id))
         } catch (error) {
             console.error("Error deleting testimony:", error)
-            alert("Failed to delete testimony")
+            alert("Failed to delete testimony. You may not have permission.")
         }
     }
 
@@ -80,8 +85,8 @@ export default function AdminTestimoniesPage() {
                             key={f}
                             onClick={() => setFilter(f as any)}
                             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${filter === f
-                                    ? "bg-primary text-white shadow-sm"
-                                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                ? "bg-primary text-white shadow-sm"
+                                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                                 }`}
                         >
                             {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -143,12 +148,14 @@ export default function AdminTestimoniesPage() {
                                         <XCircle size={16} /> Decline
                                     </button>
                                 )}
-                                <button
-                                    onClick={() => handleDelete(testimony.id)}
-                                    className="flex items-center gap-1 px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-medium transition-colors ml-2"
-                                >
-                                    <Trash2 size={16} /> Delete
-                                </button>
+                                {currentUserRole === 'admin' && (
+                                    <button
+                                        onClick={() => handleDelete(testimony.id)}
+                                        className="flex items-center gap-1 px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-medium transition-colors ml-2"
+                                    >
+                                        <Trash2 size={16} /> Delete
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}

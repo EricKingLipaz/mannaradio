@@ -87,6 +87,11 @@ router.put('/:id/status', verifyToken, async (req, res) => {
 // DELETE /api/testimonies/:id (Protected) - Delete testimony
 router.delete('/:id', verifyToken, async (req, res) => {
     try {
+        // Check if user is admin
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied. Admin role required.' });
+        }
+
         await pool.query("DELETE FROM testimonies WHERE id = ?", [req.params.id]);
         res.json({ message: 'Testimony deleted successfully' });
     } catch (error) {

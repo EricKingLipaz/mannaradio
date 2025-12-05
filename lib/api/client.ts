@@ -249,6 +249,19 @@ class ApiClient {
             method: 'DELETE',
         });
     }
+
+    // -- User Management --
+
+    async getUsers() {
+        return await this.request('/auth/users');
+    }
+
+    async createUser(userData: any) {
+        return await this.request('/auth/users', {
+            method: 'POST',
+            body: JSON.stringify(userData),
+        });
+    }
 }
 
 // Export singleton instance

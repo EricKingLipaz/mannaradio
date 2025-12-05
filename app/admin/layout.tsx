@@ -21,10 +21,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter()
   const pathname = usePathname()
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [userRole, setUserRole] = useState<string>("")
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       // Allow public access to login and register pages
       if (pathname === "/admin/login" || pathname === "/admin/register") {
         setIsLoading(false)
@@ -35,6 +36,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       if (!apiClient.isAuthenticated()) {
         router.push("/admin/login")
       } else {
+        try {
+          // Get user profile to check role
+          const { pastor } = await apiClient.request('/auth/me');
+          setUserRole(pastor.role || 'moderator');
+        } catch (error) {
+          console.error("Failed to fetch user role", error);
+        }
         setIsLoading(false)
       }
     }
@@ -63,6 +71,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin/prayer-requests", label: "Prayer Requests", icon: MessageSquare },
     { href: "/admin/testimonies", label: "Testimonies", icon: MessageSquare }, // Reusing icon for now
     { href: "/admin/settings", label: "Settings", icon: Settings },
+    // Conditionally render Users link (handled in render)
+    { href: "/admin/users", label: "Manage Users", icon: Users, adminOnly: true },
     { href: "/", label: "Back to Home", icon: Home },
   ]
 
