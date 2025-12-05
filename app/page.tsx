@@ -61,7 +61,7 @@ export default function Home() {
                 Welcome to Manna Radio & TV
               </div>
               <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent text-balance">
-                Your Spiritual Connection
+                THE VOICE OF THE TRUTH
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
                 Experience live worship, inspiring teachings, and community connection through our radio and TV

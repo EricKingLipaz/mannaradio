@@ -81,11 +81,7 @@ export default function RadioPage() {
                 </div>
 
                 {/* Info Box */}
-                <div className="bg-accent/10 border border-accent/20 rounded-lg p-6">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Stream Quality:</strong> 128 kbps | <strong>Status:</strong> Online
-                  </p>
-                </div>
+
               </div>
 
               {/* About Radio */}

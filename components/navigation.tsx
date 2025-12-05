@@ -16,7 +16,6 @@ export function Navigation() {
     { href: "/prayer-request", label: "Prayer" },
     { href: "/donate", label: "Donate" },
     { href: "/members", label: "Join Us" },
-    { href: "/admin/login", label: "Pastor Login" },
   ]
 
   return (
@@ -33,7 +32,7 @@ export function Navigation() {
                 className="object-cover"
               />
             </div>
-            <span className="text-xl font-bold text-primary-foreground hidden sm:inline">Manna</span>
+            <span className="text-xl font-bold text-primary-foreground hidden sm:inline">MANNA TEMPLE CONNECTION</span>
           </Link>
 
           {/* Desktop Menu */}

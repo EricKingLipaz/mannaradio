@@ -12,7 +12,8 @@ import {
   LogOut,
   Menu,
   X,
-  Activity
+  Activity,
+  Home
 } from "lucide-react"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -60,6 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin/donations", label: "Donations", icon: Activity },
     { href: "/admin/prayer-requests", label: "Prayer Requests", icon: MessageSquare },
     { href: "/admin/settings", label: "Settings", icon: Settings },
+    { href: "/", label: "Back to Home", icon: Home },
   ]
 
   return (
