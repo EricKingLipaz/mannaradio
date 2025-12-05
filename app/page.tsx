@@ -4,6 +4,7 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import Link from "next/link"
 import { Radio, Tv, BookOpen, Heart } from "lucide-react"
+import Image from "next/image"
 
 export default function Home() {
   const features = [
@@ -46,6 +47,16 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
             <div className="text-center space-y-6 mb-16">
+              <div className="flex justify-center mb-6">
+                <div className="relative w-32 h-32 rounded-3xl overflow-hidden shadow-2xl skew-y-3 transform hover:skew-y-0 transition-all duration-500">
+                  <Image
+                    src="/images/app-logo.png"
+                    alt="Manna Radio Logo"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
               <div className="inline-block bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-semibold">
                 Welcome to Manna Radio & TV
               </div>

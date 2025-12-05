@@ -5,6 +5,7 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { apiClient } from "@/lib/api/client"
 import { Heart, CreditCard, CheckCircle, Loader, Copy } from "lucide-react"
+import Image from "next/image"
 
 export default function DonatePage() {
     const [formData, setFormData] = useState({
@@ -53,6 +54,16 @@ export default function DonatePage() {
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     <div className="text-center mb-12">
+                        <div className="flex justify-center mb-6">
+                            <div className="relative w-24 h-24 rounded-2xl overflow-hidden shadow-xl">
+                                <Image
+                                    src="/images/app-logo.png"
+                                    alt="Manna Radio Logo"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        </div>
                         <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent mb-4">
                             Support Our Ministry
                         </h1>
@@ -66,9 +77,15 @@ export default function DonatePage() {
                         {/* Banking Details */}
                         <div className="space-y-6">
                             <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
-                                <div className="flex items-center gap-3 mb-6">
-                                    <div className="p-3 bg-primary/10 rounded-xl text-primary">
-                                        <CreditCard size={24} />
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className="relative w-16 h-16 bg-white rounded-lg p-2 shadow-sm overflow-hidden flex items-center justify-center">
+                                        <Image
+                                            src="/images/standard-bank-logo.png"
+                                            alt="Standard Bank"
+                                            width={60}
+                                            height={60}
+                                            className="object-contain"
+                                        />
                                     </div>
                                     <h2 className="text-2xl font-bold">Banking Details</h2>
                                 </div>
@@ -76,7 +93,7 @@ export default function DonatePage() {
                                 <div className="space-y-4">
                                     <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative">
                                         <p className="text-sm text-muted-foreground mb-1">Bank Name</p>
-                                        <p className="font-semibold text-lg">FNB (First National Bank)</p>
+                                        <p className="font-semibold text-lg">Standard Bank</p>
                                     </div>
 
                                     <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative">
@@ -84,19 +101,30 @@ export default function DonatePage() {
                                         <p className="font-semibold text-lg">Manna Temple Church</p>
                                     </div>
 
-                                    <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative cursor-pointer" onClick={() => copyToClipboard("62123456789")}>
+                                    <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative cursor-pointer" onClick={() => copyToClipboard("10151728613")}>
                                         <div className="flex justify-between items-center">
                                             <div>
                                                 <p className="text-sm text-muted-foreground mb-1">Account Number</p>
-                                                <p className="font-semibold text-lg">62123456789</p>
+                                                <p className="font-semibold text-lg">10151728613</p>
                                             </div>
                                             <Copy size={18} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </div>
                                     </div>
 
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative">
+                                            <p className="text-sm text-muted-foreground mb-1">Branch Code</p>
+                                            <p className="font-semibold text-lg">000205</p>
+                                        </div>
+                                        <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative">
+                                            <p className="text-sm text-muted-foreground mb-1">Account Type</p>
+                                            <p className="font-semibold text-lg">Mymobiz</p>
+                                        </div>
+                                    </div>
+
                                     <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative">
-                                        <p className="text-sm text-muted-foreground mb-1">Branch Code</p>
-                                        <p className="font-semibold text-lg">250655</p>
+                                        <p className="text-sm text-muted-foreground mb-1">Swift Address</p>
+                                        <p className="font-semibold text-lg">SBZA ZA JJ</p>
                                     </div>
 
                                     <div className="p-4 bg-secondary/5 rounded-xl border border-border group relative">
@@ -127,11 +155,20 @@ export default function DonatePage() {
                                 </div>
                             ) : (
                                 <>
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className="p-3 bg-accent/10 rounded-xl text-accent">
-                                            <Heart size={24} />
+                                    <div className="flex items-center justify-between mb-6">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-3 bg-accent/10 rounded-xl text-accent">
+                                                <Heart size={24} />
+                                            </div>
+                                            <h2 className="text-2xl font-bold">Notify Us</h2>
                                         </div>
-                                        <h2 className="text-2xl font-bold">Notify Us</h2>
+                                        <Image
+                                            src="/images/snapscan-logo.png"
+                                            alt="SnapScan"
+                                            width={80}
+                                            height={30}
+                                            className="object-contain opacity-80"
+                                        />
                                     </div>
                                     <p className="text-muted-foreground mb-6">
                                         Made a payment? Let us know so we can allocate it correctly.
@@ -146,7 +183,7 @@ export default function DonatePage() {
                                                 value={formData.donor_name}
                                                 onChange={(e) => setFormData({ ...formData, donor_name: e.target.value })}
                                                 className="w-full px-4 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                                                placeholder="John Doe"
+                                                placeholder="Eric Lipaz"
                                             />
                                         </div>
 
