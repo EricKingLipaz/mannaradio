@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useEffect, useState, useRef } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { apiClient } from "@/lib/api/client"
 import { Send, Heart, MessageCircle } from "lucide-react"
 
 interface ChatMessage {
@@ -45,16 +45,9 @@ export function LiveChat({ isTV = false }: { isTV?: boolean }) {
   }, [messages])
 
   const fetchMessages = async () => {
-    const supabase = createClient()
     try {
-      const { data, error } = await supabase
-        .from("chat_messages")
-        .select("*")
-        .order("created_at", { ascending: true })
-        .limit(50)
-
-      if (error) throw error
-      setMessages(data || [])
+      const data = await apiClient.getChatMessages(50)
+      setMessages(data.messages || [])
     } catch (error) {
       console.error("Error fetching messages:", error)
     }
@@ -72,17 +65,8 @@ export function LiveChat({ isTV = false }: { isTV?: boolean }) {
     e.preventDefault()
     if (!newMessage.trim() || !username) return
 
-    const supabase = createClient()
     try {
-      const { error } = await supabase.from("chat_messages").insert([
-        {
-          username,
-          message: newMessage,
-          message_type: "text",
-        },
-      ])
-
-      if (error) throw error
+      await apiClient.postChatMessage(username, newMessage, "text")
       setNewMessage("")
       fetchMessages()
     } catch (error) {
@@ -93,16 +77,8 @@ export function LiveChat({ isTV = false }: { isTV?: boolean }) {
   const handleLike = async () => {
     if (!username) return
 
-    const supabase = createClient()
     try {
-      await supabase.from("chat_messages").insert([
-        {
-          username,
-          message: "Liked the stream",
-          message_type: "like",
-        },
-      ])
-
+      await apiClient.postChatMessage(username, "Liked the stream", "like")
       setIsLike(true)
       setTimeout(() => setIsLike(false), 500)
       fetchMessages()
@@ -206,9 +182,8 @@ export function LiveChat({ isTV = false }: { isTV?: boolean }) {
             <button
               type="button"
               onClick={handleLike}
-              className={`px-3 py-2 rounded-lg transition-smooth ${
-                isLike ? "bg-red-500 text-white" : "bg-secondary/20 text-secondary hover:bg-secondary/30"
-              }`}
+              className={`px-3 py-2 rounded-lg transition-smooth ${isLike ? "bg-red-500 text-white" : "bg-secondary/20 text-secondary hover:bg-secondary/30"
+                }`}
             >
               <Heart size={18} fill={isLike ? "currentColor" : "none"} />
             </button>

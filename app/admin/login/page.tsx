@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { apiClient } from "@/lib/api/client"
 import { Lock, Loader } from "lucide-react"
 
 export default function AdminLoginPage() {
@@ -17,12 +17,7 @@ export default function AdminLoginPage() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const supabase = createClient()
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      if (user) {
+      if (apiClient.isAuthenticated()) {
         router.push("/admin")
       }
       setIsChecking(false)
@@ -37,26 +32,7 @@ export default function AdminLoginPage() {
     setError(null)
 
     try {
-      const supabase = createClient()
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (signInError) throw signInError
-
-      // Verify pastor exists in database
-      const { data: pastorData, error: pastorError } = await supabase
-        .from("pastors")
-        .select("id")
-        .eq("email", email)
-        .single()
-
-      if (pastorError || !pastorData) {
-        await supabase.auth.signOut()
-        throw new Error("You are not authorized as a pastor. Contact administration.")
-      }
-
+      await apiClient.login(email, password)
       router.push("/admin")
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "Login failed")

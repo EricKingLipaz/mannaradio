@@ -3,7 +3,7 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase/client"
+import { apiClient } from "@/lib/api/client"
 import { UserPlus, Loader, Eye, EyeOff, AlertCircle } from "lucide-react"
 
 export default function PastorRegisterPage() {
@@ -21,11 +21,7 @@ export default function PastorRegisterPage() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-
-        if (user) {
+        if (apiClient.isAuthenticated()) {
           router.push("/admin")
         }
       } catch (err) {
@@ -68,52 +64,9 @@ export default function PastorRegisterPage() {
     try {
       console.log("[v0] Starting pastor registration for:", email)
 
-      // Sign up with Supabase Auth
-      const { data: authData, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/admin`,
-        },
-      })
+      await apiClient.register(name, email, password)
 
-      console.log("[v0] Sign up response:", { authData, signUpError })
-
-      if (signUpError) {
-        throw new Error(signUpError.message || "Sign up failed")
-      }
-
-      if (!authData.user) {
-        throw new Error("No user returned from sign up")
-      }
-
-      // Add pastor to database
-      console.log("[v0] Adding pastor to database with id:", authData.user.id)
-
-      const { error: insertError } = await supabase.from("pastors").insert({
-        id: authData.user.id,
-        name,
-        email,
-      })
-
-      console.log("[v0] Insert response:", { insertError })
-
-      if (insertError) {
-        throw new Error(insertError.message || "Failed to create pastor record")
-      }
-
-      // Auto-login after registration
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      console.log("[v0] Sign in response:", { signInError })
-
-      if (signInError) {
-        throw new Error(signInError.message || "Login failed after registration")
-      }
-
+      console.log("[v0] Registration successful, redirecting...")
       router.push("/admin")
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed"

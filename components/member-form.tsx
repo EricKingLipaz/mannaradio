@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { Users, Loader } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
+import { apiClient } from "@/lib/api/client"
 
 export function MemberRegistrationForm() {
   const [formData, setFormData] = useState({
@@ -25,20 +25,15 @@ export function MemberRegistrationForm() {
     setMessage(null)
 
     try {
-      const supabase = createClient()
-      const { error } = await supabase.from("members").insert([
-        {
-          full_name: formData.full_name,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-          date_of_birth: formData.date_of_birth || null,
-          baptism_date: formData.baptism_date || null,
-          rank: formData.rank,
-        },
-      ])
-
-      if (error) throw error
+      await apiClient.createMember({
+        full_name: formData.full_name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        date_of_birth: formData.date_of_birth || null,
+        baptism_date: formData.baptism_date || null,
+        rank: formData.rank,
+      })
 
       setMessage({
         type: "success",
@@ -161,11 +156,10 @@ export function MemberRegistrationForm() {
         {/* Message Display */}
         {message && (
           <div
-            className={`p-4 rounded-lg ${
-              message.type === "success"
+            className={`p-4 rounded-lg ${message.type === "success"
                 ? "bg-green-100 text-green-800 border border-green-300"
                 : "bg-red-100 text-red-800 border border-red-300"
-            }`}
+              }`}
           >
             {message.text}
           </div>

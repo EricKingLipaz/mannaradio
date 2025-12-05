@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { Heart, Loader } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
+import { apiClient } from "@/lib/api/client"
 
 export function PrayerRequestForm() {
   const [formData, setFormData] = useState({
@@ -23,18 +23,13 @@ export function PrayerRequestForm() {
     setMessage(null)
 
     try {
-      const supabase = createClient()
-      const { error } = await supabase.from("prayer_requests").insert([
-        {
-          full_name: formData.full_name,
-          email: formData.email,
-          phone: formData.phone,
-          prayer_request: formData.prayer_request,
-          is_urgent: formData.is_urgent,
-        },
-      ])
-
-      if (error) throw error
+      await apiClient.createPrayerRequest({
+        full_name: formData.full_name,
+        email: formData.email,
+        phone: formData.phone,
+        prayer_request: formData.prayer_request,
+        is_urgent: formData.is_urgent,
+      })
 
       setMessage({
         type: "success",
@@ -129,11 +124,10 @@ export function PrayerRequestForm() {
         {/* Message Display */}
         {message && (
           <div
-            className={`p-4 rounded-lg ${
-              message.type === "success"
+            className={`p-4 rounded-lg ${message.type === "success"
                 ? "bg-green-100 text-green-800 border border-green-300"
                 : "bg-red-100 text-red-800 border border-red-300"
-            }`}
+              }`}
           >
             {message.text}
           </div>
