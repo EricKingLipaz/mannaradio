@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { apiClient } from "@/lib/api/client"
 import {
   LayoutDashboard,
@@ -59,7 +60,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/members", label: "Members", icon: Users },
     { href: "/admin/donations", label: "Donations", icon: Activity },
-    { href: "/admin/donations", label: "Donations", icon: Activity },
     { href: "/admin/prayer-requests", label: "Prayer Requests", icon: MessageSquare },
     { href: "/admin/testimonies", label: "Testimonies", icon: MessageSquare }, // Reusing icon for now
     { href: "/admin/settings", label: "Settings", icon: Settings },
@@ -82,9 +82,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           }`}
       >
         <div className="flex flex-col h-full">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3">
+            <div className="relative w-8 h-8">
+              <Image
+                src="/images/app-logo.png"
+                alt="Manna Radio Logo"
+                fill
+                className="object-contain"
+              />
+            </div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Manna Admin
+              ADMIN
             </h1>
           </div>
 
