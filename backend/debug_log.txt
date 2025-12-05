@@ -1,0 +1,20 @@
+Starting Debug...
+1. Starting Database Debug...
+   DB_HOST: localhost
+   DB_USER: root
+   DB_NAME: manna_radio
+
+2. Connecting to MySQL...
+   ✅ Connected successfully!
+
+3. Checking tables...
+   Found tables: pastors
+   ✅ "pastors" table exists.
+
+4. Checking "pastors" table structure...
+   Columns: id, name, email, password, created_at, updated_at
+
+5. Attempting to insert test pastor (Eric)...
+   ✅ Test pastor inserted successfully!
+
+✅ DEBUG COMPLETE. You should be able to login with eric@eric.com / password123

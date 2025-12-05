@@ -1,6 +1,6 @@
 // API Client for Manna Radio Backend
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 class ApiClient {
     private baseURL: string;
