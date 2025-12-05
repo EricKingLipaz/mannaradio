@@ -20,7 +20,7 @@ export default function AdminDashboard() {
 
         // Fetch prayer requests
         const requestsData = await apiClient.getPrayerRequests()
-        const pending = requestsData.requests.filter((r: any) => r.status === 'pending').length
+        const pending = requestsData.prayer_requests.filter((r: any) => r.status === 'pending').length
 
         setStats({
           membersCount: membersData.count || 0,

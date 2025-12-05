@@ -13,6 +13,7 @@ export function Navigation() {
     { href: "/tv", label: "TV" },
     { href: "/bible", label: "Bible" },
     { href: "/prayer-request", label: "Prayer" },
+    { href: "/donate", label: "Donate" },
     { href: "/members", label: "Join Us" },
     { href: "/admin/login", label: "Pastor Login" },
   ]

@@ -11,7 +11,8 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  Activity
 } from "lucide-react"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -56,6 +57,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/members", label: "Members", icon: Users },
+    { href: "/admin/donations", label: "Donations", icon: Activity },
     { href: "/admin/prayer-requests", label: "Prayer Requests", icon: MessageSquare },
     { href: "/admin/settings", label: "Settings", icon: Settings },
   ]
@@ -91,8 +93,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.href}
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "bg-primary/10 text-primary"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`}
                 >
                   <Icon size={20} />

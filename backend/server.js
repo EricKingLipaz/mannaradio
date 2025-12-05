@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const membersRoutes = require('./routes/members');
 const prayerRequestsRoutes = require('./routes/prayer-requests');
 const chatRoutes = require('./routes/chat');
+const donationRoutes = require('./routes/donations');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/members', membersRoutes);
 app.use('/api/prayer-requests', prayerRequestsRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/donations', donationRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

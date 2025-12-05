@@ -6,7 +6,10 @@ class ApiClient {
     private baseURL: string;
 
     constructor() {
-        this.baseURL = `${API_URL}/api`;
+        // Ensure we don't double up on /api if it's already in the env var
+        this.baseURL = API_URL.endsWith('/api')
+            ? API_URL
+            : `${API_URL}/api`;
     }
 
     // Get JWT token from localStorage
@@ -185,6 +188,36 @@ class ApiClient {
         return await this.request('/chat/messages', {
             method: 'POST',
             body: JSON.stringify({ username, message, message_type: messageType }),
+        });
+    }
+
+    // Donation endpoints
+    async getDonations(filters: any = {}) {
+        const queryParams = new URLSearchParams();
+        if (filters.type) queryParams.append('type', filters.type);
+        if (filters.startDate) queryParams.append('startDate', filters.startDate);
+        if (filters.endDate) queryParams.append('endDate', filters.endDate);
+        if (filters.limit) queryParams.append('limit', filters.limit.toString());
+
+        const query = queryParams.toString();
+        return await this.request(`/donations${query ? `?${query}` : ''}`);
+    }
+
+    async getDonationStats() {
+        return await this.request('/donations/stats');
+    }
+
+    async createDonation(donationData: any) {
+        return await this.request('/donations', {
+            method: 'POST',
+            body: JSON.stringify(donationData),
+        });
+    }
+
+    async submitPublicDonation(donationData: any) {
+        return await this.request('/donations/public', {
+            method: 'POST',
+            body: JSON.stringify(donationData),
         });
     }
 }
