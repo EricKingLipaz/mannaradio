@@ -220,6 +220,35 @@ class ApiClient {
             body: JSON.stringify(donationData),
         });
     }
+
+    // Testimony endpoints
+    async getPublicTestimonies() {
+        return await this.request('/testimonies');
+    }
+
+    async submitTestimony(data: { full_name: string; location?: string; content: string }) {
+        return await this.request('/testimonies', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    }
+
+    async getAdminTestimonies() {
+        return await this.request('/testimonies/admin');
+    }
+
+    async updateTestimonyStatus(id: number, status: 'approved' | 'declined' | 'pending') {
+        return await this.request(`/testimonies/${id}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({ status }),
+        });
+    }
+
+    async deleteTestimony(id: number) {
+        return await this.request(`/testimonies/${id}`, {
+            method: 'DELETE',
+        });
+    }
 }
 
 // Export singleton instance

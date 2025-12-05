@@ -59,7 +59,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/members", label: "Members", icon: Users },
     { href: "/admin/donations", label: "Donations", icon: Activity },
+    { href: "/admin/donations", label: "Donations", icon: Activity },
     { href: "/admin/prayer-requests", label: "Prayer Requests", icon: MessageSquare },
+    { href: "/admin/testimonies", label: "Testimonies", icon: MessageSquare }, // Reusing icon for now
     { href: "/admin/settings", label: "Settings", icon: Settings },
     { href: "/", label: "Back to Home", icon: Home },
   ]

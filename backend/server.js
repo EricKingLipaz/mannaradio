@@ -26,6 +26,7 @@ app.use('/api/members', membersRoutes);
 app.use('/api/prayer-requests', prayerRequestsRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/donations', donationRoutes);
+app.use('/api/testimonies', require('./routes/testimonies'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

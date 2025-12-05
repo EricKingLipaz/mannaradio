@@ -71,3 +71,15 @@ CREATE INDEX idx_members_rank ON members(rank);
 CREATE INDEX idx_prayer_requests_status ON prayer_requests(status);
 CREATE INDEX idx_prayer_requests_urgent ON prayer_requests(is_urgent);
 CREATE INDEX idx_chat_messages_created_at ON chat_messages(created_at);
+
+-- Create testimonies table
+CREATE TABLE IF NOT EXISTS testimonies (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(255) NOT NULL,
+  location VARCHAR(255),
+  content TEXT NOT NULL,
+  status ENUM('pending', 'approved', 'declined') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+CREATE INDEX idx_testimonies_status ON testimonies(status);
