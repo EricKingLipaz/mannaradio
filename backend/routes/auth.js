@@ -108,7 +108,7 @@ router.post('/login', async (req, res) => {
 router.get('/me', authMiddleware, async (req, res) => {
     try {
         const [pastors] = await pool.query(
-            'SELECT id, name, email, created_at FROM pastors WHERE id = ?',
+            'SELECT id, name, email, role, created_at FROM pastors WHERE id = ?',
             [req.pastor.id]
         );
 
